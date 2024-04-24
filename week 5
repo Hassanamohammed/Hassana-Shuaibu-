@@ -1,0 +1,432 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "3005ebed",
+   "metadata": {},
+   "source": [
+    "## Import Pandas Libraray ##"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 159,
+   "id": "0a36f0cf",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "62d76c8a",
+   "metadata": {},
+   "source": [
+    "### Load the Dataset "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 160,
+   "id": "71691ffb",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "data = pd.read_csv('cost_revenue_clean.csv')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "95272ee3",
+   "metadata": {},
+   "source": [
+    "#### Explore the Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 161,
+   "id": "3b8e68d5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "   production_budget_usd  worldwide_gross_usd\n",
+      "0                1000000                   26\n",
+      "1                  10000                  401\n",
+      "2                 400000                  423\n",
+      "3                 750000                  450\n",
+      "4                  10000                  527\n",
+      "<class 'pandas.core.frame.DataFrame'>\n",
+      "RangeIndex: 5034 entries, 0 to 5033\n",
+      "Data columns (total 2 columns):\n",
+      " #   Column                 Non-Null Count  Dtype\n",
+      "---  ------                 --------------  -----\n",
+      " 0   production_budget_usd  5034 non-null   int64\n",
+      " 1   worldwide_gross_usd    5034 non-null   int64\n",
+      "dtypes: int64(2)\n",
+      "memory usage: 78.8 KB\n",
+      "None\n",
+      "       production_budget_usd  worldwide_gross_usd\n",
+      "count           5.034000e+03         5.034000e+03\n",
+      "mean            3.290784e+07         9.515685e+07\n",
+      "std             4.112589e+07         1.726012e+08\n",
+      "min             1.100000e+03         2.600000e+01\n",
+      "25%             6.000000e+06         7.000000e+06\n",
+      "50%             1.900000e+07         3.296202e+07\n",
+      "75%             4.200000e+07         1.034471e+08\n",
+      "max             4.250000e+08         2.783919e+09\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(data.head())\n",
+    "\n",
+    "# Display the dataset info\n",
+    "print(data.info())\n",
+    "\n",
+    "#Describe the dataset\n",
+    "print(data.describe())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 170,
+   "id": "fbfba406",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "8000000       9\n",
+       "7000000       6\n",
+       "2000000       6\n",
+       "11000000      5\n",
+       "6000000       4\n",
+       "             ..\n",
+       "13747234      1\n",
+       "13738574      1\n",
+       "13725032      1\n",
+       "13719474      1\n",
+       "2783918982    1\n",
+       "Name: worldwide_gross_usd, Length: 4968, dtype: int64"
+      ]
+     },
+     "execution_count": 170,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "\n",
+    "data['worldwide_gross_usd'].value_counts()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 181,
+   "id": "7f247156",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/html": [
+       "<div>\n",
+       "<style scoped>\n",
+       "    .dataframe tbody tr th:only-of-type {\n",
+       "        vertical-align: middle;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe tbody tr th {\n",
+       "        vertical-align: top;\n",
+       "    }\n",
+       "\n",
+       "    .dataframe thead th {\n",
+       "        text-align: right;\n",
+       "    }\n",
+       "</style>\n",
+       "<table border=\"1\" class=\"dataframe\">\n",
+       "  <thead>\n",
+       "    <tr style=\"text-align: right;\">\n",
+       "      <th></th>\n",
+       "      <th>production_budget_usd</th>\n",
+       "      <th>worldwide_gross_usd</th>\n",
+       "    </tr>\n",
+       "  </thead>\n",
+       "  <tbody>\n",
+       "    <tr>\n",
+       "      <th>0</th>\n",
+       "      <td>1000000</td>\n",
+       "      <td>26</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>1</th>\n",
+       "      <td>10000</td>\n",
+       "      <td>401</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>2</th>\n",
+       "      <td>400000</td>\n",
+       "      <td>423</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>3</th>\n",
+       "      <td>750000</td>\n",
+       "      <td>450</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>4</th>\n",
+       "      <td>10000</td>\n",
+       "      <td>527</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>5</th>\n",
+       "      <td>1800000</td>\n",
+       "      <td>673</td>\n",
+       "    </tr>\n",
+       "    <tr>\n",
+       "      <th>6</th>\n",
+       "      <td>1000000</td>\n",
+       "      <td>703</td>\n",
+       "    </tr>\n",
+       "  </tbody>\n",
+       "</table>\n",
+       "</div>"
+      ],
+      "text/plain": [
+       "   production_budget_usd  worldwide_gross_usd\n",
+       "0                1000000                   26\n",
+       "1                  10000                  401\n",
+       "2                 400000                  423\n",
+       "3                 750000                  450\n",
+       "4                  10000                  527\n",
+       "5                1800000                  673\n",
+       "6                1000000                  703"
+      ]
+     },
+     "execution_count": 181,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# sort the value of production budget\n",
+    "data.sort_values(by='production_budget_usd')\n",
+    "\n",
+    "#locate values of index 0 to 7\n",
+    "data.iloc[:7]\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "67ce1265",
+   "metadata": {},
+   "source": [
+    "### Handle Missing Value"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 162,
+   "id": "0663a806",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "      production_budget_usd  worldwide_gross_usd\n",
+      "0                   1000000                   26\n",
+      "1                     10000                  401\n",
+      "2                    400000                  423\n",
+      "3                    750000                  450\n",
+      "4                     10000                  527\n",
+      "...                     ...                  ...\n",
+      "5029              225000000           1519479547\n",
+      "5030              215000000           1671640593\n",
+      "5031              306000000           2058662225\n",
+      "5032              200000000           2207615668\n",
+      "5033              425000000           2783918982\n",
+      "\n",
+      "[5034 rows x 2 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "#checking for missing value\n",
+    "data.isna().sum()\n",
+    "print(data)\n",
+    "# Drop rows with missing value\n",
+    "#data.dropna()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "ba48b695",
+   "metadata": {},
+   "source": [
+    "#### Handle duplicate Data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 163,
+   "id": "57fa3c5b",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "2"
+      ]
+     },
+     "execution_count": 163,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.duplicated().sum()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 164,
+   "id": "a31de56e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Drop duplicated rows\n",
+    "#data = data.drop_duplicates()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "9e23190f",
+   "metadata": {},
+   "source": [
+    "### Drop rows with zero values"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 165,
+   "id": "9d855d4d",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(5034, 2)"
+      ]
+     },
+     "execution_count": 165,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "data.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 166,
+   "id": "0ff8c84d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#data.dropna(subset=['worldwide_gross_usd'])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 167,
+   "id": "f87dac1a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "      production_budget_usd  worldwide_gross_usd\n",
+      "0                   1000000                   26\n",
+      "1                     10000                  401\n",
+      "2                    400000                  423\n",
+      "3                    750000                  450\n",
+      "4                     10000                  527\n",
+      "...                     ...                  ...\n",
+      "5029              225000000           1519479547\n",
+      "5030              215000000           1671640593\n",
+      "5031              306000000           2058662225\n",
+      "5032              200000000           2207615668\n",
+      "5033              425000000           2783918982\n",
+      "\n",
+      "[5034 rows x 2 columns]\n"
+     ]
+    }
+   ],
+   "source": [
+    "data.head()\n",
+    "print(data)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ecd3621d",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b6ac187b",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5eae5be6",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "31b16e6c",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
